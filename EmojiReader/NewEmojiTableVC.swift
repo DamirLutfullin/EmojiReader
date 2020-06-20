@@ -9,7 +9,7 @@
 import UIKit
 
 protocol backEmoji: class {
-    func getEmoji(emoji: EmojiData, numberOfRow: Int?)
+    func getEmoji(emoji: EmojiData)
 }
 
 class NavControllerForNewEmojiTableVC: UINavigationController {
@@ -26,7 +26,6 @@ class NavControllerForNewEmojiTableVC: UINavigationController {
 class NewEmojiTableVC: UITableViewController {
     
     weak var deleagate: backEmoji?
-    var numberOfRow: Int?
     
     var emojiCell = UITableViewCell()
     var nameCell = UITableViewCell()
@@ -123,7 +122,7 @@ class NewEmojiTableVC: UITableViewController {
     
     @objc private func save() {
         self.dismiss(animated: true) {
-            self.deleagate?.getEmoji(emoji: EmojiData(emoji: self.emojiTF.text!, name: self.nameTF.text!, comment: self.commentTF.text!, isFavotite: false), numberOfRow: self.numberOfRow)
+            self.deleagate?.getEmoji(emoji: EmojiData(emoji: self.emojiTF.text!, name: self.nameTF.text!, comment: self.commentTF.text!, isFavotite: false))
         }
        
     }

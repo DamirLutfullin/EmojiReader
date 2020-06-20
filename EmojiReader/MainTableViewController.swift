@@ -29,7 +29,7 @@ class MainTableViewController: UITableViewController {
     
     @objc func go() {
         let detailVC = NavControllerForNewEmojiTableVC(rootViewController: NewEmojiTableVC(style: .grouped))
-        let newEmojiTVC = detailVC.viewControllers.first as! NewEmojiTableVC
+        let newEmojiTVC = detailVC.topViewController as! NewEmojiTableVC
         newEmojiTVC.deleagate = self
         self.navigationController?.show(detailVC, sender: nil)
     }
@@ -40,11 +40,11 @@ class MainTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailVC = NavControllerForNewEmojiTableVC(rootViewController: NewEmojiTableVC(style: .grouped))
-        let newEmojiTVC = detailVC.viewControllers.first as! NewEmojiTableVC
+        let newEmojiTVC = detailVC.topViewController as! NewEmojiTableVC
         newEmojiTVC.commentText = arrayOfEmoji[indexPath.row].comment
         newEmojiTVC.emojiText = arrayOfEmoji[indexPath.row].emoji
         newEmojiTVC.nameText = arrayOfEmoji[indexPath.row].name
-        newEmojiTVC.numberOfRow = indexPath.row
+        newEmojiTVC.title = "Edit"
         newEmojiTVC.deleagate = self
         self.navigationController?.show(detailVC, sender: nil)
     }
@@ -113,13 +113,13 @@ class MainTableViewController: UITableViewController {
 //MARK: Back emoji protocol
 extension MainTableViewController: backEmoji {
     
-    func getEmoji(emoji: EmojiData, numberOfRow: Int?) {
-        if let numberOfRow = numberOfRow {
-            self.arrayOfEmoji[numberOfRow] = emoji
-            tableView.reloadRows(at: [IndexPath(row: numberOfRow, section: 0)], with: .automatic)
+    func getEmoji(emoji: EmojiData) {
+        if let indexPath = tableView.indexPathForSelectedRow {
+            self.arrayOfEmoji[indexPath.row] = emoji
+            tableView.reloadRows(at: [indexPath], with: .automatic)
         } else {
+            tableView.insertRows(at: [IndexPath(row: arrayOfEmoji.count, section: 0)], with: .automatic)
             self.arrayOfEmoji.append(emoji)
-            tableView.insertRows(at: [IndexPath(row: arrayOfEmoji.count - 1, section: 0)], with: .automatic)
         }
     }
     
